@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+
+  mongodb:
+    image: mongo
+    env_file: ./mongodb.env
+    networks:
+      - backend
+    volumes:
+      - "c:/mongo/guestbook/db:/data/db"
+    deploy:
+      restart_policy:
+        condition: any
+  
+  backend-api:
+    image: bassambst/guestbook-backend:2.0
+    env_file: ./backend-api.env
+    ports:
+      - 9002:3000
+    networks:
+      - backend
+    depends_on:
+      - mongodb
+    deploy:
+      restart_policy:
+        condition: any
+  
+  frontend:
+    image: bassambst/guestbook-frontend:2.0
+    env_file: ./frontend.env
+    ports:
+      - 9003:4200
+    networks:
+      - frontend
+    depends_on:
+      - mongodb
+      - backend-api
+    deploy:
+      restart_policy:
+        condition: any
+
+networks:
+  frontend:
+  backend:

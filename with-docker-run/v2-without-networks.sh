@@ -13,7 +13,6 @@ docker run \
 --name gb-backend-20 \
 -p 9002:3000 \
 -e MONGODB_URI='mongodb://admin:password@172.17.0.2:27017/guestbook?authSource=admin' \
--e GUESTBOOK_NAME='MyPopRock Festival 2.0' \
 --restart=always \
 -d bassambst/guestbook-backend:2.0
 

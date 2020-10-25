@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+
+  frontend:
+    image: bassambst/guestbook-frontend:1.0
+    ports:
+      - "9001:4200"

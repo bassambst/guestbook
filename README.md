@@ -152,3 +152,12 @@ $ docker run \
 -d bassambst/guestbook-frontend:2.0
 
 ```
+
+# Guesbook - Run with Docker-Compose
+Navigate to ./with-docker-compose/guestbook-v2
+Run:
+```sh
+docker-compose up
+```
+Test:
+chrome http://localhost:9003
