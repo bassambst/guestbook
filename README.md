@@ -1,4 +1,4 @@
-# Guesbook - Run with Kubectl
+# Guestbook - Run with Kubectl
 
 ### Requirements:
 - Minikube
@@ -50,7 +50,7 @@ kubectl get pods --watch
 Ref:
 https://hub.docker.com/repository/docker/bassambst/guestbook-frontend
 
-# Guesbook - Run with Docker Run
+# Guestbook - Run with Docker Run
 
 ### Requirements:
 - Docker Desktop
@@ -153,7 +153,7 @@ $ docker run \
 
 ```
 
-# Guesbook - Run with Docker-Compose
+# Guestbook - Run with Docker-Compose
 Navigate to ./with-docker-compose/guestbook-v2
 Run:
 ```sh
