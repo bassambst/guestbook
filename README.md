@@ -50,7 +50,8 @@ kubectl get pods --watch
 Ref:
 https://hub.docker.com/repository/docker/bassambst/guestbook-frontend
 
-# Run using Docker Run
+# Guesbook - Run with Docker Run
+
 ### Requirements:
 - Docker Desktop
 
