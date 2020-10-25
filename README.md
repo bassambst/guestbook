@@ -46,6 +46,9 @@ We are then supposed to watch 3 running pods
 ```sh
 kubectl get pods --watch
 ```
+Ref:
+https://hub.docker.com/repository/docker/bassambst/guestbook-frontend
+
 
 
 
