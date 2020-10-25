@@ -49,7 +49,68 @@ kubectl get pods --watch
 Ref:
 https://hub.docker.com/repository/docker/bassambst/guestbook-frontend
 
+# Run using Docker Run
+### Requirements:
+- Docker Desktop
 
+Clean up all containers
+```
+docker rm -f $(docker ps -aq)
+```
 
+Run frontend 1.0:
+```sh
+$ docker run \
+--name gb-frontend-10 \
+-p 9001:4200 \
+-d bassambst/guestbook-frontend:1.0
+```
+Test it with:
+```
+chrome http://localhost:9001
+```
 
+Run MongoDB:
+```sh
+$ docker run \
+--name gb-backend-mongodb \
+-p 27017:27017 \
+-v c:/mongo/guestbook/db:/data/db \
+-e MONGO_INITDB_DATABASE='guestbook' \
+-e MONGO_INITDB_ROOT_USERNAME='admin' \
+-e MONGO_INITDB_ROOT_PASSWORD='password' \
+--restart=always \
+-d mongo
+```
 
+Get MongoDB container IP address via
+```sh
+$ docker inspect -f='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' gb-backend-mongodb
+```
+
+Run backend API (provide MongoDB contaienr ip to the env variable MONGODB_URI):
+```sh
+$docker run \
+--name gb-backend-20 \
+-p 9002:3000 \
+-e MONGODB_URI='mongodb://admin:password@172.17.0.2:27017/guestbook?authSource=admin' \
+-e GUESTBOOK_NAME='MyPopRock Festival 2.0' \
+--restart=always \
+-d bassambst/guestbook-backend:2.0
+```
+
+Run Frontend 2.0
+```sh
+$docker run \
+--name gb-frontend-20 \
+-p 9003:4200 \
+-e BACKEND_URI='http://localhost:9002/guestbook' \
+-e GUESTBOOK_NAME='MyPopRock Festival 2.0' \
+--restart=always \
+-d bassambst/guestbook-frontend:2.0
+
+```
+Test Guestbook 2.0:
+```
+chrome http://localhost:9003
+```
