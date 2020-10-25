@@ -76,7 +76,6 @@ Run MongoDB:
 ```sh
 $ docker run \
 --name gb-backend-mongodb \
--p 27017:27017 \
 -v c:/mongo/guestbook/db:/data/db \
 -e MONGO_INITDB_DATABASE='guestbook' \
 -e MONGO_INITDB_ROOT_USERNAME='admin' \
@@ -121,6 +120,8 @@ chrome http://localhost:9003
 ```sh
 $ docker network create gb-backend-net
 $ docker network create gb-frontend-net
+
+docker rm -f $(docker ps -aq)
 
 $ docker run \
 --name gb-backend-mongodb \
