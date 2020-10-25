@@ -19,4 +19,7 @@ Get minikube ip and update hosts file:
 $ minikube ip
 [minikube ip] frontend.minikube.local
 ```
-
+Open browser at:
+```
+http://frontend.minikube.local
+```
