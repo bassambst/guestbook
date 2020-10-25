@@ -1,4 +1,5 @@
-# guestbook
+# Guesbook - Run with Kubectl
+
 ### Requirements:
 - Minikube
 - Kubectl
