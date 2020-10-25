@@ -160,4 +160,6 @@ Run:
 docker-compose up
 ```
 Test:
+```sh
 chrome http://localhost:9003
+```
