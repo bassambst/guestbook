@@ -200,39 +200,83 @@ curl --data-binary @guestbook-1.0.0.tgz http://127.0.0.1:8080/api/charts
 ```
 
 ## 2- guestbook-1.0.1: guestbook with updated title in frontend. Still no backend. 
-- Copy the raw chart from 1.0.0 into 1.0.1 folder
-- Make changes to ./with-helm/1.0.1/guestbook/templates/deployment.yaml and change the containerImage to bassambst/guestbook-frontend:1.1
+Copy the raw chart from 1.0.0 into 1.0.1 folder.
+
+Make changes to ./with-helm/1.0.1/guestbook/templates/deployment.yaml and change the containerImage to bassambst/guestbook-frontend:1.1
 ```
     spec:
       containers:
       - image: bassambst/guestbook-frontend:1.1
 ```
-- Run:
+Run:
 ```
 helm upgrade guestbook ./guestbook
 ```
-- Observe the release revision is 2
+Observe the release revision is 2
 ```
 helm list
 ```
-- Verify the container image of the deployment is 1.1
+Verify the container image of the deployment is 1.1
 ```
 kubectl get deployments -o wide
 ```
-- Run the application and observe the title Guestbook : "Concert For Climate 1.1"
+Run the application and observe the title Guestbook : "Concert For Climate 1.1"
 ```
 chrome http://frontend.minikube.local
 ```
-- We can rollback the release to previous revision:
+We can rollback the release to previous revision:
 ```
 helm rollback guestbook 1
 ```
-- Delete the release and all its deployed K8s objects
+Delete the release and all its deployed K8s objects
 ```
 helm delete guestbook
 ```
-## 3- guestbook-2.0.0: umbrella chart guestbook with frontend, backend and database.
-- Go to ./with-helm/2.0.0
+## 3- guestbook-2.0.0: umbrella chart guestbook with frontend, backend and database. Plain manifests.
+
+Go to ./with-helm/2.0.0
 ```
 helm install guestbook ./guestbook
 ```
+Then
+```
+chrome http://frontend.minikube.local
+```
+## 4- guestbook-2.1.0: 
+The chart here is on the path to allow the deployments of multiple releases of the same chart. Collision of Kubernetes objects names/labels is avoided by letting Helm supply them as:
+```
+{{ .Release.Name }}-{{ .Chart.Name }}
+```
+Extracted changable values to values.yaml files for frontend and backend.
+
+Go to ./with-helm/2.1.0
+```
+helm install guestbook ./guestbook
+```
+Then
+```
+chrome http://frontend.minikube.local
+```
+PS: frontend and backend charts supports this so far. 
+
+## 5- guestbook-2.2.0: 
+- Supplied dynamic Kubernetes objects names and labels. 
+- With extracted changable values to values.yaml files. 
+- Solved the problem of having backend chart to dynamically refer to database chart in its secrets. Knowing that the database chart service name is now dynamic!
+- Introducing sub-templates in _helpers.tpl
+- The chart still cannot be deployed to multiple releases yet, since the Ingress entry points for both the frontend and the backend  are still static.
+
+Go to ./with-helm/2.2.0
+```
+helm install guestbook ./guestbook
+```
+Then
+```
+chrome http://frontend.minikube.local
+```
+
+## 6- guestbook-2.5.0:
+- Allowing dev/test deployments (full multi release support - full isolation)
+- Unifying Ingress at Umbrella chart level. Where host name is dynamically generated from the release name.
+- Still support sub-chart Ingress level deployment in case someone opted to installing sub-chart alone.
+
