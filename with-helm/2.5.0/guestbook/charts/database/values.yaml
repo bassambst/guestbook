@@ -6,5 +6,5 @@ secret:
 service:
   type: NodePort
   # port: 80
-# volume:
-#   storage: 100Mi
+volume:
+  storage: 100Mi
