@@ -4,4 +4,4 @@ metadata:
   name: {{ include "frontend.fullname" . }}-config
 data:
   guestbook-name: {{ .Values.config.guestbook_name }}
-  backend-uri: {{ .Values.config.backend_uri }}
+  backend-uri: {{ list "http://" .Release.Name ".backend.minikube.local/guestbook" | join "" | quote }}

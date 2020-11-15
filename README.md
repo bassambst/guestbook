@@ -278,5 +278,5 @@ chrome http://frontend.minikube.local
 ## 6- guestbook-2.5.0:
 - Allowing dev/test deployments (full multi release support - full isolation)
 - Unifying Ingress at Umbrella chart level. Where host name is dynamically generated from the release name.
-- Still support sub-chart Ingress level deployment in case someone opted to installing sub-chart alone.
+- Still support sub-chart Ingress level deployment in case someone opted to installing sub-chart as standalone.
 
