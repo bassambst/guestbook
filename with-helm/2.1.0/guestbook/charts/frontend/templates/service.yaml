@@ -5,10 +5,12 @@ metadata:
     name: {{ .Release.Name }}-{{ .Chart.Name }}
   name: {{ .Release.Name }}-{{ .Chart.Name }}
 spec:
-  type: {{ .Values.service.type }}
+{{- with .Values.service }}
+  type: {{ .type }}
   ports:
     - protocol: "TCP"
-      port: {{ .Values.service.port }}
+      port: {{ .port }}
       targetPort: 4200
+{{- end }}
   selector:
     app: {{ .Release.Name }}-{{ .Chart.Name }}
