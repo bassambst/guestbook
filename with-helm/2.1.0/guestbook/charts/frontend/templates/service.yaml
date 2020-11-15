@@ -5,9 +5,10 @@ metadata:
     name: {{ .Release.Name }}-{{ .Chart.Name }}
   name: {{ .Release.Name }}-{{ .Chart.Name }}
 spec:
+  type: {{ .Values.service.type }}
   ports:
     - protocol: "TCP"
-      port: 80
+      port: {{ .Values.service.port }}
       targetPort: 4200
   selector:
     app: {{ .Release.Name }}-{{ .Chart.Name }}
