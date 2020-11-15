@@ -1,0 +1,2 @@
+Chart: {{ .Chart.Name }}-{{ .Chart.Version }} installed successfully.
+Application: {{ .Chart.Name}}-{{ .Chart.AppVersion }}

@@ -163,3 +163,76 @@ Test:
 ```sh
 chrome http://localhost:9003
 ```
+
+# Guestbook - Deploy with Helm
+## 1- guestbook-1.0.0: helm chart of guestbook as static web app without backend.
+- go to ./with-helm/1.0.0 (empty folder)
+- Initialize new helm chart named guestbook:
+```
+helm create guestbook
+```
+- Delete unnecessary files.
+- Copy Kubernetes yaml files from ./with-kubectl/v1 to ./with-helm/1.0.0
+- Go to ./with-helm/1.0.0
+- To make sure things will run well:
+```
+helm install guestbook ./guestbook --dry-run --debug
+```
+- If all seems Good:
+```
+helm install guestbook ./guestbook
+```
+- Verify the helm release:
+```
+helm list
+```
+- Run the application and observe the title Guestbook : "Concert For Climate 1.0"
+```
+chrome http://frontend.minikube.local
+```
+- Package the chart:
+```
+helm package guestbook
+```
+- Push the chart to ChartMuseum:
+```
+curl --data-binary @guestbook-1.0.0.tgz http://127.0.0.1:8080/api/charts
+```
+
+## 2- guestbook-1.0.1: guestbook with updated title in frontend. Still no backend. 
+- Copy the raw chart from 1.0.0 into 1.0.1 folder
+- Make changes to ./with-helm/1.0.1/guestbook/templates/deployment.yaml and change the containerImage to bassambst/guestbook-frontend:1.1
+```
+    spec:
+      containers:
+      - image: bassambst/guestbook-frontend:1.1
+```
+- Run:
+```
+helm upgrade guestbook ./guestbook
+```
+- Observe the release revision is 2
+```
+helm list
+```
+- Verify the container image of the deployment is 1.1
+```
+kubectl get deployments -o wide
+```
+- Run the application and observe the title Guestbook : "Concert For Climate 1.1"
+```
+chrome http://frontend.minikube.local
+```
+- We can rollback the release to previous revision:
+```
+helm rollback guestbook 1
+```
+- Delete the release and all its deployed K8s objects
+```
+helm delete guestbook
+```
+## 3- guestbook-2.0.0: umbrella chart guestbook with frontend, backend and database.
+- Go to ./with-helm/2.0.0
+```
+helm install guestbook ./guestbook
+```
