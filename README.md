@@ -343,3 +343,72 @@ Clean up helm releases:
 ```
 helm delete $(helm list --short)
 ```
+
+## 6- guestbook-3.0.0: Use stable mongodb chart instead of own one.
+We do that since we want to deploy production grade Kubernetes objects of mongodb that involves primary, secondary and arbiter nodes. Doing this manually is hectic. We can here use stable/mongodb helm chart.
+
+Updated Chart.yaml:
+```
+apiVersion: v2
+name: guestbook
+description: A Helm chart for Kubernetes
+type: application
+version: 3.0.0
+appVersion: 3.0.0
+dependencies:
+    - name: backend
+      version: 1.0.0
+      repository: https://64791d457585a66a3b3b9149e58fdbb7574f8929@raw.githubusercontent.com/bassambst/helm-repo-private/master
+    - name: frontend
+      version: 2.0.0
+      repository: https://64791d457585a66a3b3b9149e58fdbb7574f8929@raw.githubusercontent.com/bassambst/helm-repo-private/master
+    - name: mongodb
+      version: 7.8.8
+      repository: https://charts.helm.sh/stable
+      condition: mongodb.enabled
+```
+Updated Values.yaml to override the configurations/secrets of backend subchart. And configure mongodb subchart:
+ ```
+backend:
+  enabled: true
+  secret:
+    mongodb_uri:
+      username: root
+      password: password
+      dbchart: mongodb
+      dbconn: "guestbook?authSource=admin&replicaSet=rs0"
+  ingress:
+    enabled: false
+frontend:
+  ingress:
+    enabled: false
+
+mongodb:
+  replicaSet:
+    enabled: true
+    key: password
+  mongodbRootPassword: password
+  persistence:
+    size: 100Mi
+
+ingress:
+  hosts:
+    - host:
+        domain: frontend.minikube.local
+        chart: frontend
+    - host:
+        domain: backend.minikube.local
+        chart: backend
+
+```
+Then:
+```
+helm dependency update guestbook
+helm install dev guestbook
+```
+Verify:
+```
+helm list --short
+kubectl get pods
+```
+Notice 5 pods instead of 3
