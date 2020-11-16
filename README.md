@@ -404,6 +404,13 @@ ingress:
 Then:
 ```
 helm dependency update guestbook
+```
+Verify resolved dependencies:
+```
+helm dependency list guestbook
+```
+Install the chart:
+```
 helm install dev guestbook
 ```
 Verify:
