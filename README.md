@@ -291,3 +291,51 @@ Install test release:
 helm install test ./guestbook/ --set frontend.config.guestbook_name=TEST
 ```
 Observe the printed NOTES.txt for the URLs.
+
+## 6- guestbook-2.6.0: Helm Dependencies
+We have to generate tgz files. Push them to Helm Repo (we can deploy ChartMuseum or Use GitHub).
+
+To generate tgz helm charts, copy ./with-helm/2.5.0/charts to ./with-helm/dist. Then:
+```
+helm package frontend backend database
+```
+That will generate the tgzs.
+
+### Using Dependencies instead of exploded subcharts.
+This version leverages Helm dependencies. Where dependencies are not included as exploded charts in charts folder. But as tgz files automatically.
+
+1- We include this in Chart.yaml
+```
+dependencies:
+    - name: backend
+      version: ^1.0.0
+      repository: https://localhost:8090
+    - name: frontend
+      version: ^2.0.0
+      repository: https://localhost:8090
+    - name: database
+      version: ^1.0.0
+      repository: https://localhost:8090
+```
+
+To resolve the dependencies:
+```
+helm dependency update guestbook
+```
+That will generate Chart.lock. It contains specific versions not ranges. We can use it in next dependency downloads.
+```
+helm dependency build guestbook
+```
+To verify dependencies:
+```
+helm dependency list guestbook
+```
+Then we install dev and test releases:
+```
+helm install dev guestbook
+helm install test guestbook
+```
+Clean up helm releases:
+```
+helm delete $(helm list --short)
+```
