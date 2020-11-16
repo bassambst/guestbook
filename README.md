@@ -300,6 +300,10 @@ To generate tgz helm charts, copy ./with-helm/2.5.0/charts to ./with-helm/dist. 
 helm package frontend backend database
 ```
 That will generate the tgzs.
+We can generate index.yaml needed by Helm Repository like
+```
+helm repo index .
+```
 
 ### Using Dependencies instead of exploded subcharts.
 This version leverages Helm dependencies. Where dependencies are not included as exploded charts in charts folder. But as tgz files automatically.
